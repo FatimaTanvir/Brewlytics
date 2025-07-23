@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Building, Globe } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const BreweryCard = ({ brewery }) => {
   const getBadgeClass = (type) => {
@@ -13,45 +14,48 @@ const BreweryCard = ({ brewery }) => {
   };
 
   return (
-    <div className="brewery-card">
-      <div className="brewery-card-header">
-        <div className="brewery-card-content">
-          <h3 className="brewery-card-title">{brewery.name}</h3>
-          <div className="brewery-card-details">
-            <div className="brewery-card-detail">
-              <Building />
-              <span className="capitalize">{brewery.brewery_type}</span>
+    <Link to={`/brewery/${brewery.id}`} className="block hover:shadow-lg transition-shadow">
+      <div className="brewery-card">
+        <div className="brewery-card-header">
+          <div className="brewery-card-content">
+            <h3 className="brewery-card-title">{brewery.name}</h3>
+            <div className="brewery-card-details">
+              <div className="brewery-card-detail">
+                <Building />
+                <span className="capitalize">{brewery.brewery_type}</span>
+              </div>
+              {brewery.city && brewery.state && (
+                <div className="brewery-card-detail">
+                  <MapPin />
+                  <span>{brewery.city}, {brewery.state}</span>
+                </div>
+              )}
+              {brewery.country && (
+                <div className="brewery-card-detail">
+                  <Globe />
+                  <span>{brewery.country}</span>
+                </div>
+              )}
             </div>
-            {brewery.city && brewery.state && (
-              <div className="brewery-card-detail">
-                <MapPin />
-                <span>{brewery.city}, {brewery.state}</span>
-              </div>
-            )}
-            {brewery.country && (
-              <div className="brewery-card-detail">
-                <Globe />
-                <span>{brewery.country}</span>
-              </div>
-            )}
+          </div>
+          <div className={`brewery-card-badge ${getBadgeClass(brewery.brewery_type)}`}>
+            {brewery.brewery_type}
           </div>
         </div>
-        <div className={`brewery-card-badge ${getBadgeClass(brewery.brewery_type)}`}>
-          {brewery.brewery_type}
-        </div>
+        {brewery.website_url && (
+          <div className="brewery-card-website">
+            <a 
+              href={brewery.website_url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+            >
+              Visit Website →
+            </a>
+          </div>
+        )}
       </div>
-      {brewery.website_url && (
-        <div className="brewery-card-website">
-          <a 
-            href={brewery.website_url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-          >
-            Visit Website →
-          </a>
-        </div>
-      )}
-    </div>
+    </Link>
   );
 };
 
